@@ -14,11 +14,21 @@
         - PublicAdd.java
         - QualityAdd.java
         - AdVO.java
-        - Picture.java
+        - PictureVO.java
 
-    En todos los casos estamos repitiendo la metodología tradicional para creación de métodos GET, SET, toString...
+    En todos los casos se repite la metodología tradicional para creación de métodos GET, SET, toString...
 
     Existen librerías como **Lombok**, que simplifican toda estas tareas, haciendo el código mucho más legible y agilizando las tareas de desarrollo.
+
+2. **Nombres con sentido**
+
+    Todos los nombres que se utilizan son bastante descriptivos.
+
+3. **Comentarios**
+
+    Faltan comentarios más descriptivos a lo largo de todo el código que ayuden a entender tanto lo que hace como lo que se pretende llevar a cabo.
+
+    Por otro lado tampoco hay ningún uso de Javadoc.
 
 ## Buenas prácticas
 
@@ -27,15 +37,15 @@
         Ejemplos:
         - AdsController.java
 
-    En este código ejemplo no se ha tenido en cuenta la versión de la API en la definición del endpoint, puede llegar a ser interesante seguir esta estrategia si, por ejemplo, si quiere utilizar dos versiones a la vez.
+    En este código ejemplo no se ha tenido en cuenta la versión de la API en la definición del endpoint, puede llegar a ser interesante seguir esta estrategia si, por ejemplo, se quiere utilizar dos versiones a la vez.
 
 2. **Auth**
 
-    No se utiliza ningún tipo de control de autorización. Un uso sencillo podría ser por ejemplo en spring un token de tipo JWT.
+    No se utiliza ningún tipo de control de autorización. Un uso sencillo podría ser por ejemplo un token de tipo JWT.
 
 3. **Documentación de la API**
 
-    No se documenta-define ninguno de los endpoints, como por ejemplo mediange uso de Swagger o similar.
+    No se documenta/define ninguno de los endpoints, como por ejemplo mediante uso de Swagger o similar.
 
     Swagger indica los recursos disponibles en la API REST y las operaciones que pueden llamar.
 
@@ -49,7 +59,7 @@
 
     En ambos métodos se recorre un lista completa de resultados para volver a crear una lista de objetos similares, perjudicando al rendimiento en mi opinión.
 
-    Como alternativa se podría definir un serializador personalizado y personalizar el retorno (Ej: [enlace a documentación externa - JACKSON](https://www.baeldung.com/jackson-custom-serialization)).
+    Como alternativa se podría definir un serializador y personalizar el retorno (Ej: [enlace a documentación externa - JACKSON](https://www.baeldung.com/jackson-custom-serialization)).
 
     Si por necesidades del negocio, se declara que **es necesario** la declaración de este nuevo objeto, para obtener un código mucho más limpio, en lugar de setear cada uno de los valores dentro del bucle, crearía un constructor en la clase del nuevo objeto que reciba como parámetro el original:
 
@@ -95,11 +105,11 @@
         Ejemplo:
         AdsServicesImpl#calculateScore
 
-    En mi opinión el código debería ser mucho más atómico, para cada uno de los requisitos de negocio que se indican se debería desaclopar, de esta forma en un futuro sería mucho más fácil incorporar nuevos requisitos.
+    El código debería ser mucho más atómico, para cada uno de los requisitos de negocio que se indican se debería desaclopar, de esta forma en un futuro sería mucho más fácil incorporar nuevos requisitos.
 
-    Por ejemplo podría crearse una clase llamada *Score* la cual, tendría como único atributo la puntuación (*score*). A esta clase se pueden ir incorporando diferentes métodos que calculen por separado cada una de los cálculos, por ejemplo *getScorePhotos*, *getScoreDescription*... Por último existirá un método orquestador encargado de ejecutar cada uno de estos cálculos.
+    Por ejemplo podría crearse una clase llamada *Score* la cual, tendría como único atributo la puntuación. A esta clase se pueden ir incorporando diferentes métodos que realicen por separado cada una de los cálculos, por ejemplo *getScorePhotos*, *getScoreDescription*... Por último existirá un método orquestador encargado de ejecutar cada uno de estos cálculos.
 
-    Si seguimos esta estrategia, además de que obtendremos un código mucho más limpio, será mucho más fácil de mantener, testear y añadir nuevas condiciones por la atomicidad que estamos dándole.
+    Si seguimos esta estrategia, además de que obtendremos un código mucho más limpio, será más fácil de mantener, testear y añadir nuevas condiciones por la atomicidad que estamos dándole.
 
 3. **Query**
 
@@ -108,7 +118,7 @@
         InMemoryPersistence#findIrrelevantAds
 
     ```java
-        @Override
+    @Override
     public List<Ad> findRelevantAds() {
         return ads
                 .stream()
@@ -164,7 +174,7 @@
     
     > ... En el caso de los pisos, la descripción aporta 10 puntos si tiene entre 20 y 49 palabras o 30 puntos si tiene 50 o más palabras... 
 
-    Tal y como esta disñado, si una descripción tiene 50 palabras se sumarían 40 puntos en lugar de 30, para solucionarlo sería una claúsula *if - else* en lugar de dos *if*.
+    Tal y como esta diseñado, si una descripción tiene 50 palabras se sumarían 40 puntos en lugar de 30, para solucionarlo sería una claúsula *if - else* en lugar de dos *if*.
 
 4. **Date vs LocalDateTime - AdsServicesImpl#calculateScore**
 
@@ -182,10 +192,10 @@
 
     Un claro ejemplo puede ser el endpoint *score*. Puede que haya ocurrido algún tipo de error, pero el usuario recibirá una respuesta 200OK.
 
-6. **NullPointer - InMermoryPersistence#findIrrelevantAds & findRelevantAds**
+6. **NullPointer - InMermoryPersistence#findIrrelevantAds & #findRelevantAds**
 
     ```java
-        @Override
+    @Override
     public List<Ad> findIrrelevantAds() {
         return ads
                 .stream()
